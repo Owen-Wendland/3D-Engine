@@ -19,10 +19,17 @@ class GraphicsRender():
         self.object = object3D(self)
         self.projection = Projection(self)
         self.object.translate([0.2,0.4,0.2])
-        self.object.rotateY(-math.pi / 4)
+        self.axes = Axes(self)
+        self.axes.translate([0.7,0.9,0.7])
+        self.worldAxes = Axes(self)
+        self.worldAxes.movementFlag = False
+        self.worldAxes.scale(2.5)
+        self.worldAxes.translate([0.0001,0.0001,0.0001])
         
     def draw(self):
         self.screen.fill(pg.Color('darkslategray'))
+        self.worldAxes.draw()
+        self.axes.draw()
         self.object.draw()
         
     def run(self):

@@ -5,18 +5,18 @@ class object3D():
     def __init__(self,render):
         self.render = render
         #BOX VERTEX
-        self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
-                                  (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1)
-                                ])
-        #BOX FACES
-        self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4)])
-        #house VERTEXES
         #self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
-        #                          (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1), 
-        #                          (1,1.5,0.5,1),(0,1.5,0.5,1)
+        #                          (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1)
         #                        ])
+        #BOX FACES
+        #self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4)])
+        #house VERTEXES
+        self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
+                                  (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1), 
+                                  (1,1.5,0.5,1),(0,1.5,0.5,1)
+                                ])
         #HOUSE FACES
-        #self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4),(9,8,6,5),(9,8,2,1)])
+        self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4),(9,8,6,5),(9,8,2,1)])
  
         self.font = pg.font.SysFont('Arial', 30, bold=True)
         self.faceColors = [(pg.Color('orange'), face) for face in self.faces]
@@ -30,6 +30,8 @@ class object3D():
     def movement(self):
         if self.movementFlag:
             self.rotateY(pg.time.get_ticks() % 0.005)
+            self.rotateX(pg.time.get_ticks() % 0.005)
+            self.rotateZ(pg.time.get_ticks() % 0.005)
         
     def screenProjection(self):
         vertexes = self.vertexes @ self.render.camera.cameraMatrix()

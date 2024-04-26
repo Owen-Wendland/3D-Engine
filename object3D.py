@@ -1,9 +1,24 @@
 import pygame as pg
 from matrixFunctions import *
+from numba import njit
+
+
+@njit(fastmath=True)
+def any_func(arr, a, b):
+    return np.any((arr == a) | (arr == b))
 
 class object3D():
-    def __init__(self,render):
+    def __init__(self,render, vertexes, faces):
         self.render = render
+        self.vertexes = np.array(vertexes)
+        self.faces = faces
+        self.translate([0.0001, 0.0001, 0.0001])
+
+        self.font = pg.font.SysFont('Arial', 30, bold=True)
+        self.color_faces = [(pg.Color('orange'), face) for face in self.faces]
+        self.movement_flag, self.drawVertexes = True, False
+        self.label = ''
+        
         #BOX VERTEX
         #self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
         #                          (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1)
@@ -11,16 +26,16 @@ class object3D():
         #BOX FACES
         #self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4)])
         #house VERTEXES
-        self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
-                                  (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1), 
-                                  (1,1.5,0.5,1),(0,1.5,0.5,1)
-                                ])
+        #self.vertexes = np.array([(0,0,0,1),(0,1,0,1),(1,1,0,1),(1,0,0,1),
+        #                          (0,0,1,1),(0,1,1,1),(1,1,1,1),(1,0,1,1), 
+        #                          (1,1.5,0.5,1),(0,1.5,0.5,1)
+        #                        ])
         #HOUSE FACES
-        self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4),(9,8,6,5),(9,8,2,1)])
+        #self.faces = np.array([(0,1,2,3),(4,5,6,7),(0,4,5,1),(2,3,7,6),(1,2,6,5),(0,3,7,4),(9,8,6,5),(9,8,2,1)])
  
         self.font = pg.font.SysFont('Arial', 30, bold=True)
         self.faceColors = [(pg.Color('orange'), face) for face in self.faces]
-        self.movementFlag, self.drawVertexes = True, True
+        self.movementFlag, self.drawVertexes = False, False
         self.label = ''
         
     def draw(self):
@@ -44,16 +59,16 @@ class object3D():
         for index, faceColors in enumerate(self.faceColors):
             color, face = faceColors
             polygon = vertexes[face]
-            if not np.any((polygon == self.render.h_width) | (polygon == self.render.h_height)):
-                pg.draw.polygon(self.render.screen, color, polygon, 3)
+            if not any_func(polygon, self.render.h_width,self.render.h_height):
+                pg.draw.polygon(self.render.screen, color, polygon, 1)
                 if self.label:
                     text = self.font.render(self.label[index], True, pg.Color('white'))
                     self.render.screen.blit(text, polygon[-1])
 
         if self.drawVertexes:
             for vertex in vertexes:
-                if not np.any((vertex == self.render.h_width) | (vertex == self.render.h_height)):
-                    pg.draw.circle(self.render.screen, pg.Color('white'), vertex, 6)
+                if not any_func(vertex, self.render.h_width,self.render.h_height):
+                    pg.draw.circle(self.render.screen, pg.Color('white'), vertex, 2)
         
     def translate(self, pos):
         self.vertexes = self.vertexes @ translate(pos)

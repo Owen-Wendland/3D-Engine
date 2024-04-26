@@ -15,6 +15,12 @@ class GraphicsRender():
         self.createObjects()
         
     def createObjects(self):
+        self.camera = Camera(self, [-5,5,-50])
+        self.object = self.getObjFile('C:\\Users\\Owner\\3dEngineProject\\3D-Engine\\tank.obj')
+        self.projection = Projection(self)
+        
+        
+        '''
         self.camera = Camera(self, [0.5,1,-4])
         self.object = object3D(self)
         self.projection = Projection(self)
@@ -25,11 +31,23 @@ class GraphicsRender():
         self.worldAxes.movementFlag = False
         self.worldAxes.scale(2.5)
         self.worldAxes.translate([0.0001,0.0001,0.0001])
+        '''
+        
+    def getObjFile(self, filename):
+        vertex, faces = [], []
+        with open(filename) as f:
+            for line in f:
+                if line.startswith('v '):
+                    vertex.append([float(i) for i in line.split()[1:]] + [1])
+                elif line.startswith('f'):
+                    faces_ = line.split()[1:]
+                    faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
+        return object3D(self, vertex, faces)
         
     def draw(self):
         self.screen.fill(pg.Color('darkslategray'))
-        self.worldAxes.draw()
-        self.axes.draw()
+        #self.worldAxes.draw()
+        #self.axes.draw()
         self.object.draw()
         
     def run(self):

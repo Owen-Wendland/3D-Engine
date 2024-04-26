@@ -35,7 +35,7 @@ class object3D():
  
         self.font = pg.font.SysFont('Arial', 30, bold=True)
         self.faceColors = [(pg.Color('orange'), face) for face in self.faces]
-        self.movementFlag, self.drawVertexes = False, False
+        self.movementFlag, self.drawVertexes = True, True
         self.label = ''
         
     def draw(self):
@@ -45,8 +45,8 @@ class object3D():
     def movement(self):
         if self.movementFlag:
             self.rotateY(pg.time.get_ticks() % 0.005)
-            self.rotateX(pg.time.get_ticks() % 0.005)
-            self.rotateZ(pg.time.get_ticks() % 0.005)
+            #self.rotateX(pg.time.get_ticks() % 0.005)
+            #self.rotateZ(pg.time.get_ticks() % 0.005)
         
     def screenProjection(self):
         vertexes = self.vertexes @ self.render.camera.cameraMatrix()

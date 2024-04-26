@@ -16,7 +16,7 @@ class GraphicsRender():
         
     def createObjects(self):
         self.camera = Camera(self, [-5,5,-50])
-        self.object = self.getObjFile('C:\\Users\\Owner\\3dEngineProject\\3D-Engine\\tank.obj')
+        self.object = self.getObjFile('rubberDuck.obj')
         self.projection = Projection(self)
         
         

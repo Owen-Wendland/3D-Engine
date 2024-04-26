@@ -12,7 +12,7 @@ class Camera:
         self.vFov = self.hFov * (render.height / render.width)
         self.nearPlane = 0.1
         self.farPlane = 100
-        self.movingSpeed = 5.2
+        self.movingSpeed = 0.2
         self.rotationSpeed = 0.005
 
         self.anglePitch = 0
@@ -56,14 +56,21 @@ class Camera:
             if key[pg.K_DOWN]:
                 self.cameraPitch(self.rotationSpeed*2)
             
+    def axiiIdentity(self):
+        self.forward = np.array([0, 0, 1, 1])
+        self.up = np.array([0, 1, 0, 1])
+        self.right = np.array([1, 0, 0, 1])
+            
     def cameraYaw(self, angle):
-        rotate = rotateY(angle)
-        self.forward = self.forward @ rotate
-        self.right = self.right @ rotate
-        self.up = self.up @ rotate
+        self.angleYaw += angle
 
     def cameraPitch(self, angle):
-        rotate = rotateX(angle)
+        self.anglePitch += angle
+        
+    def cameraUpdateAxii(self):
+        #rotate = rotateY(self.angleYaw) @ rotateY(self.anglePitch)
+        rotate = rotateX(self.anglePitch) @ rotateY(self.angleYaw)  # this concatenation gives right visual
+        self.axiiIdentity()
         self.forward = self.forward @ rotate
         self.right = self.right @ rotate
         self.up = self.up @ rotate
@@ -89,4 +96,5 @@ class Camera:
         ])
         
     def cameraMatrix(self):
+        self.cameraUpdateAxii()
         return self.translateMatrix() @ self.rotateMatrix()
